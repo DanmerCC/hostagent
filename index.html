@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node <script>document.write(process.versions.node)</script>,
+    Chrome <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.
+  </body>
+  <script src="socket.io.js"></script>
+  <script type="module">
+        const io = require('socket.io-client');
+        const {exec} = require('child_process')
+        const urlDarkVader = 'http://ws.asinoma.com'
+        require('dotenv').config()
+        var axios = require('axios')
+
+        console.log(process.env.REDIRECTION_ENDPOINT);
+
+        function execute(command, callback) {
+            exec(command, (error, stdout, stderr) => { 
+                callback(stdout); 
+            });
+        };
+
+        execute('ffmpeg -version', (output) => {
+            console.log(output);
+        });
+ 
+        const socket = io(urlDarkVader);
+        socket.on('connect', function(){});
+        socket.on('createdvideo', function(data){
+          axios.post(process.env.REDIRECTION_ENDPOINT,data).then(response=>{
+            console.log(response.data)
+          })
+        });
+        socket.on('messages', function(data){
+
+          console.log(data);
+        });
+        socket.on('disconnect', function(){});
+</script> 
+</html>
