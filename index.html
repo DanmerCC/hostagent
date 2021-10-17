@@ -2,47 +2,68 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>ZoomBot</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <h1>ZoomBot</h1>
+    <div id="c_state"></div>
+    <br>
+    <ul id="history"></ul>
   </body>
-  <script src="socket.io.js"></script>
+  <script src="./public/socket.io.js"></script>
   <script type="module">
         const io = require('socket.io-client');
         const {exec} = require('child_process')
-        const urlDarkVader = 'http://ws.asinoma.com'
+        const urlDarkVader = 'wss://ws1.clickaqui.cyou'
+        const log = require('simple-node-logger').createSimpleLogger('project.log');
+        var state = document.getElementById('c_state')
+        var history = document.getElementById('history')
         require('dotenv').config()
         var axios = require('axios')
-
+        history.append("Historico")
         console.log(process.env.REDIRECTION_ENDPOINT);
+        console.log(urlDarkVader);
 
         function execute(command, callback) {
             exec(command, (error, stdout, stderr) => { 
                 callback(stdout); 
             });
         };
-
-        execute('ffmpeg -version', (output) => {
-            console.log(output);
-        });
  
         const socket = io(urlDarkVader);
-        socket.on('connect', function(){});
+        socket.on('connect', function(){
+          state.innerHTML = 'Conectado'
+          console.log("Conectado")
+          console.log(socket);
+        });
+
+        socket.on("connect_error", (err) => {
+          console.error(err)
+          console.log("Error de conectarse",err);
+        });
+        console.log(socket);
         socket.on('createdvideo', function(data){
-          axios.post(process.env.REDIRECTION_ENDPOINT,data).then(response=>{
-            console.log(response.data)
-          })
+          console.log(data);
+          if(data.type == 'zoom'){
+            axios.post(process.env.REDIRECTION_ENDPOINT,data.data).then(response=>{
+              var lii = document.createElement('li')
+              lii.innerHTML ='Nueva accion detectada'
+              history.append(lii)
+              console.log(response.data)
+            })
+          }
+
+          log.info('recibiendo data :'+JSON.stringify(data));
+          
         });
         socket.on('messages', function(data){
 
           console.log(data);
         });
-        socket.on('disconnect', function(){});
+        socket.on('disconnect', function(){
+          state.innerHTML = 'Desconectado'
+        });
 </script> 
 </html>
