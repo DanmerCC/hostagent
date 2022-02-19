@@ -45,7 +45,8 @@
         });
         console.log(socket);
         socket.on('createdvideo', function(data){
-          console.log(data);
+          
+          console.log((new Date()).toISOString(),data);
           if(data.type == 'zoom'){
             axios.post(process.env.REDIRECTION_ENDPOINT,data.data).then(response=>{
               var lii = document.createElement('li')
