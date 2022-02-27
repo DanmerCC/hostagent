@@ -17,7 +17,13 @@
         const io = require('socket.io-client');
         const {exec} = require('child_process')
         const urlDarkVader = 'wss://ws1.clickaqui.cyou'
-        const log = require('simple-node-logger').createSimpleLogger('project.log');
+        const opts = {
+          logFilePath:'projectlogv2.log',
+          timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS',
+          fileNamePattern:'project-<DATE>.log'
+        };
+        const log = require('simple-node-logger').createSimpleLogger(opts);
+        
         var state = document.getElementById('c_state')
         var history = document.getElementById('history')
         require('dotenv').config()
