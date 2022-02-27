@@ -18,11 +18,11 @@
         const {exec} = require('child_process')
         const urlDarkVader = 'wss://ws1.clickaqui.cyou'
         const opts = {
-          logFilePath:'projectlogv2.log',
+          logDirectory:'./',
           timestampFormat:'YYYY-MM-DD HH:mm:ss.SSS',
           fileNamePattern:'project-<DATE>.log'
         };
-        const log = require('simple-node-logger').createSimpleLogger(opts);
+        const log = require('simple-node-logger').createRollingFileLogger(opts);
         
         var state = document.getElementById('c_state')
         var history = document.getElementById('history')
