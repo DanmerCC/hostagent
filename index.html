@@ -53,10 +53,11 @@
         socket.on('createdvideo', function(data){
           
           console.log((new Date()).toISOString(),data);
-          if(data.type == 'zoom'){
-            axios.post(process.env.REDIRECTION_ENDPOINT,data.data).then(response=>{
+          if(data.type == 'zoom' || data.type == 'github' || data.type == "zoom2"){
+            axios.post(process.env.REDIRECTION_ENDPOINT+data.type,data.data).then(response=>{
               var lii = document.createElement('li')
-              lii.innerHTML ='Nueva accion detectada'
+              var event = (typeof data.data['event'] == 'string' )?data.data['event']:''
+              lii.innerHTML ='Nueva accion Zoom detectada '+ event
               history.append(lii)
               console.log(response.data)
             })

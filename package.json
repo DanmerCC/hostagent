@@ -11,13 +11,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^15.1.2"
+    "electron": "^15.1.2",
+    "electron-builder": "^22.14.13"
   },
   "dependencies": {
     "axios": "^0.20.0",
     "child_process": "^1.0.2",
     "dotenv": "^8.2.0",
-    "electron-builder": "^22.14.13",
+    "js-json-tree": "^0.3.2",
     "simple-node-logger": "^18.12.24",
     "socket.io": "^2.3.0",
     "socket.io-client": "^4.3.2",
